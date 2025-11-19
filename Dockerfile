@@ -1,10 +1,10 @@
 # Estágio de Build: Compila a aplicação Quarkus
 FROM registry.access.redhat.com/ubi8/openjdk-17 AS build
 WORKDIR /app
-COPY educavrv/mvnw .
+COPY --chmod=+x educavrv/mvnw .
 COPY educavrv/.mvn .mvn
+COPY pom.xml .
 COPY educavrv/src src
-RUN chmod +x mvnw
 RUN ./mvnw package -DskipTests
 
 # Estágio de Execução: Executa a aplicação Quarkus
