@@ -1,14 +1,11 @@
 # ----- ESTÁGIO DE BUILD (Compila a aplicação Quarkus) -----
-# Usamos uma imagem Red Hat UBI com OpenJDK 17
-FROM registry.access.redhat.com/ubi8/openjdk-17 AS build
+# Usamos uma imagem Eclipse Temurin (OpenJDK) 17
+FROM eclipse-temurin:17-jdk-focal AS build
 WORKDIR /app
 
-# Instala ferramentas essenciais que o Maven pode precisar (tar, gzip, unzip)
-# Isso resolve o erro "Cannot exec: No such file or directory" para tar/gzip
-RUN microdnf update -y && microdnf install -y tar gzip unzip
+# REMOVEMOS A LINHA DE microdnf AQUI! Ela não é mais necessária.
 
 # Copia o Maven Wrapper (mvnw e .mvn) com permissão de execução
-# Isso resolve o erro "Permission denied" para mvnw
 COPY --chmod=+x educavrv/mvnw .
 COPY educavrv/.mvn .mvn
 
@@ -23,8 +20,8 @@ COPY educavrv/src src
 RUN ./mvnw package -DskipTests
 
 # ----- ESTÁGIO DE EXECUÇÃO (Roda a aplicação compilada) -----
-# Usamos uma imagem de runtime mais leve com OpenJDK 17
-FROM registry.access.redhat.com/ubi8/openjdk-17-runtime
+# Usamos uma imagem de runtime mais leve do Eclipse Temurin 17
+FROM eclipse-temurin:17-jre-focal
 WORKDIR /work/
 
 # Copia os artefatos compilados do estágio de build para o estágio de execução
