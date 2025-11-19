@@ -4,6 +4,7 @@ WORKDIR /app
 COPY educavrv/mvnw .
 COPY educavrv/.mvn .mvn
 COPY educavrv/src src
+RUN chmod +x mvnw
 RUN ./mvnw package -DskipTests
 
 # Estágio de Execução: Executa a aplicação Quarkus
